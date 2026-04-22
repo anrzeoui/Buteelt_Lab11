@@ -85,7 +85,12 @@ class App extends React.Component<Props, GameState> {
         <div key={index}><BoardCell cell={cell}></BoardCell></div>
       )
   }
-
+// App.tsx дотор App анги дотор нэмнэ
+undo = async () => {
+  const response = await fetch('/undo');
+  const json = await response.json();
+  this.setState({ cells: json['cells'] });
+}
   /**
    * This function will call after the HTML is rendered.
    * We update the initial state by creating a new game.
@@ -108,6 +113,7 @@ class App extends React.Component<Props, GameState> {
    * @see https://reactjs.org/docs/react-component.html
    */
   render(): React.ReactNode {
+    <button onClick={this.undo}>Undo</button>
     /**
      * We use JSX to define the template. An advantage of JSX is that you
      * can treat HTML elements as code.
@@ -119,9 +125,8 @@ class App extends React.Component<Props, GameState> {
           {this.state.cells.map((cell, i) => this.createCell(cell, i))}
         </div>
         <div id="bottombar">
-          <button onClick={/* get the function, not call the function */this.newGame}>New Game</button>
-          {/* Exercise: implement Undo function */}
-          <button>Undo</button>
+          <button onClick={this.newGame}>New Game</button>
+          <button onClick={this.undo}>Undo</button>
         </div>
       </div>
     );
