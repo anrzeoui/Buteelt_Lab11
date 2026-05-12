@@ -20,6 +20,10 @@ public class Board {
         return this.cells[y * 3 + x];
     }
 
+    public boolean isFull() {
+        return Arrays.stream(this.cells).noneMatch(cell -> cell == null);
+    }
+
     public Board updateCell(int x, int y, Player player) {
         Player[] newCells = Arrays.copyOf(this.cells, this.cells.length);
         newCells[y * 3 + x] = player;

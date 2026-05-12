@@ -34,15 +34,23 @@ public class App extends NanoHTTPD {
     public Response serve(IHTTPSession session) {
         String uri = session.getUri();
         Map<String, String> params = session.getParms();
+
         if (uri.equals("/newgame")) {
             this.game = new Game();
         } else if (uri.equals("/undo")) {
-    this.game = this.game.undo();
-}// App.java доторх serve метод дотор
+            this.game = this.game.undo();
+        } else if (uri.equals("/play")) {
+            try {
+                int x = Integer.parseInt(params.getOrDefault("x", "-1"));
+                int y = Integer.parseInt(params.getOrDefault("y", "-1"));
+                this.game = this.game.play(x, y);
+            } catch (NumberFormatException ignored) {
+                // Keep the current game state when the request is malformed.
+            }
+        }
 
-        // Extract the view-specific data from the game and apply it to the template.
         GameState gameplay = GameState.forGame(this.game);
-        return newFixedLengthResponse(gameplay.toString());
+        return newFixedLengthResponse(Response.Status.OK, "application/json", gameplay.toString());
     }
 
     public static class Test {

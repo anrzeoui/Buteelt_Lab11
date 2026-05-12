@@ -5,14 +5,26 @@ import java.util.Arrays;
 public class GameState {
 
     private final Cell[] cells;
+    private final String instructions;
+    private final String nextPlayer;
+    private final String winner;
+    private final boolean gameOver;
 
-    private GameState(Cell[] cells) {
+    private GameState(Cell[] cells, String instructions, String nextPlayer, String winner, boolean gameOver) {
         this.cells = cells;
+        this.instructions = instructions;
+        this.nextPlayer = nextPlayer;
+        this.winner = winner;
+        this.gameOver = gameOver;
     }
 
     public static GameState forGame(Game game) {
         Cell[] cells = getCells(game);
-        return new GameState(cells);
+        Player winner = game.getWinner();
+        boolean gameOver = winner != null || game.isDraw();
+        String winnerText = winner == null ? "" : textForPlayer(winner);
+        String instructions = getInstructions(game, winner);
+        return new GameState(cells, instructions, textForPlayer(game.getPlayer()), winnerText, gameOver);
     }
 
     public Cell[] getCells() {
@@ -26,13 +38,25 @@ public class GameState {
     @Override
     public String toString() {
         return """
-                { "cells": %s}
-                """.formatted(Arrays.toString(this.cells));
+                {
+                    "cells": %s,
+                    "instructions": "%s",
+                    "nextPlayer": "%s",
+                    "winner": "%s",
+                    "gameOver": %b
+                }
+                """.formatted(
+                Arrays.toString(this.cells),
+                escapeJson(this.instructions),
+                this.nextPlayer,
+                this.winner,
+                this.gameOver);
     }
 
     private static Cell[] getCells(Game game) {
         Cell cells[] = new Cell[9];
         Board board = game.getBoard();
+        boolean gameOver = game.getWinner() != null || game.isDraw();
         for (int x = 0; x <= 2; x++) {
             for (int y = 0; y <= 2; y++) {
                 String text = "";
@@ -42,13 +66,31 @@ public class GameState {
                     text = "X";
                 else if (player == Player.PLAYER1)
                     text = "O";
-                else if (player == null) {
+                else if (player == null && !gameOver) {
                     playable = true;
                 }
                 cells[3 * y + x] = new Cell(x, y, text, playable);
             }
         }
         return cells;
+    }
+
+    private static String getInstructions(Game game, Player winner) {
+        if (winner != null)
+            return textForPlayer(winner) + " wins!";
+        if (game.isDraw())
+            return "Draw game!";
+        return textForPlayer(game.getPlayer()) + "'s turn";
+    }
+
+    private static String textForPlayer(Player player) {
+        if (player == Player.PLAYER0)
+            return "X";
+        return "O";
+    }
+
+    private static String escapeJson(String value) {
+        return value.replace("\\", "\\\\").replace("\"", "\\\"");
     }
 }
 
@@ -88,7 +130,7 @@ class Cell {
                     "text": "%s",
                     "playable": %b,
                     "x": %d,
-                    "y": %d 
+                    "y": %d
                 }
                 """.formatted(this.text, this.playable, this.x, this.y);
     }

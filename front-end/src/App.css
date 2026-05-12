@@ -1,40 +1,78 @@
 #board {
   display: grid;
-  grid-template-columns: auto auto auto;
-  background-color: #2196F3;
-  padding: 10px
+  grid-template-columns: repeat(3, minmax(80px, 1fr));
+  gap: 10px;
+  width: min(92vmin, 560px);
+  margin: 0 auto;
+  background-color: #1f7a8c;
+  padding: 10px;
+  border-radius: 8px;
 }
 
 .cell {
-  background-color: rgba(255, 255, 255, 0.8);
-  border: 1px solid rgba(0, 0, 0, 0.8);
-  padding: 20px;
-  font-size: 30px;
-  height: 25vmin;
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  background-color: #f8fafc;
+  border: 2px solid #0f172a;
+  border-radius: 6px;
+  color: #0f172a;
+  font-size: clamp(48px, 15vmin, 96px);
+  font-weight: 700;
+  line-height: 1;
   text-align: center;
+}
+
+.cell-wrapper {
+  min-width: 0;
+}
+
+.cell-link {
+  display: block;
+  color: inherit;
+  text-decoration: none;
 }
 
 #bottombar {
-  height: 5vh;
+  display: flex;
+  gap: 12px;
+  width: min(92vmin, 560px);
+  margin: 16px auto 0;
 }
 
 #instructions {
-  height: 5vh;
-  background-color: white;
-  padding: 0px;
-  margin: 0px;
+  width: min(92vmin, 560px);
+  min-height: 48px;
+  display: grid;
+  place-items: center;
+  background-color: #ffffff;
+  color: #0f172a;
+  padding: 8px 12px;
+  margin: 0 auto 16px;
   text-align: center;
-  border: 1px solid black;
+  border: 2px solid #0f172a;
+  border-radius: 8px;
+  box-sizing: border-box;
+  font-size: clamp(20px, 4vmin, 32px);
+  font-weight: 700;
 }
 
 #bottombar button {
-  width: 50%;
-  /* height: 100%; */
+  flex: 1;
+  min-height: 44px;
   margin: 0;
-  padding: 0;
-  position: relative;
-  float: left;
-  font-size: 2vw
+  padding: 8px 12px;
+  border: 2px solid #0f172a;
+  border-radius: 6px;
+  background: #facc15;
+  color: #0f172a;
+  cursor: pointer;
+  font-size: clamp(16px, 3vmin, 22px);
+  font-weight: 700;
+}
+
+#bottombar button:hover {
+  background: #fde047;
 }
 
 html,
@@ -42,6 +80,20 @@ body {
   height: 100%;
   margin: 0;
   padding: 0;
+  background: #e0f2fe;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
-.playable { background-color: red;}
+#game {
+  min-height: 100vh;
+  padding: 24px 0;
+  box-sizing: border-box;
+}
+
+.playable {
+  background-color: #d9f99d;
+}
+
+.playable:hover {
+  background-color: #bef264;
+}
