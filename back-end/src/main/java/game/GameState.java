@@ -21,6 +21,7 @@ public class GameState {
     public static GameState forGame(Game game) {
         Cell[] cells = getCells(game);
         Player winner = game.getWinner();
+        
         boolean gameOver = winner != null || game.isDraw();
         String winnerText = winner == null ? "" : textForPlayer(winner);
         String instructions = getInstructions(game, winner);

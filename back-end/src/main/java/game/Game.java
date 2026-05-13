@@ -17,6 +17,7 @@ public class Game {
     private final Board board;
     private final Player player;
     private final List<Game> history;
+    
 
     public Game() {
         this(new Board(), Player.PLAYER0);
@@ -54,6 +55,9 @@ public class Game {
     }
 
     public Game undo() {
+        if (this.getWinner() != null) {
+            return this;
+        }
         if (this.history.isEmpty()) {
             return this;
         }
@@ -80,5 +84,11 @@ public class Game {
 
     public boolean isDraw() {
         return this.getWinner() == null && this.board.isFull();
+    }
+
+    private class getWinner {
+
+        public getWinner() {
+        }
     }
 }
